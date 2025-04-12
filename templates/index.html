@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Agri App</title>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+	<link rel="stylesheet" type="text/css" href="./static/css/main.css">
+	<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins:wght@100&display=swap"
+		rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container">
+			<a class="navbar-brand" href="/">
+				<p>Urban Agri</p>
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav m-auto">
+					<div class="collapse navbar-collapse" id="navbarNav">
+						<ul class="navbar-nav m-auto">
+							<li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Services</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" href="/crop-disease">Crop Diseases</a></li>
+									<li><a class="dropdown-item" href="/fertilizer-recommendation">Fertilizer recommendation</a></li>
+									<li><a class="dropdown-item" href="/crop-recommendation">Crop recommendation</a></li>
+								</ul>
+							</li>
+						</ul>
+
+						<!-- ✅ Add this for the Login button (right side of nav) -->
+						<ul class="navbar-nav ms-auto">
+							{% if session.get('username') %}
+							<li class="nav-item">
+								<a class="nav-link disabled" href="#">👤 {{ session['username'] }}</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/logout">Logout</a>
+							</li>
+							{% else %}
+							<li class="nav-item">
+								<a class="nav-link" href="/login"><i class="fas fa-sign-in-alt me-1"></i>Login</a>
+							</li>
+							{% endif %}
+						</ul>
+					</div>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	{% block content %}
+	<section id="banner">
+		<div class="banner-text">
+			<h1>Urban Agri</h1>
+			<p>Bridging the gap between technology and nature</p>
+			<div class="banner-btn">
+				<a href="#services"><span></span>Find Out</a>
+				<a href="#feature"><span></span>Read More</a>
+			</div>
+		</div>
+	</section>
+
+	<section id="feature">
+		<div class="title-text">
+			<h1>OUR SERVICES</h1>
+		</div>
+		<div class="feature-box">
+			<div class="features">
+				<h1>Quick Diagnosis</h1>
+				<div class="features-desc"><i class="fa fa-bolt me-2"></i>Identify crop diseases quickly and efficiently.</div>
+				<h1>Increase Yield</h1>
+				<div class="features-desc"><i class="fa fa-seedling me-2"></i>Get the best recommendation to increase
+					productivity.</div>
+				<h1>Reduce Cost</h1>
+				<div class="features-desc"><i class="fa fa-dollar-sign me-2"></i>No need for costly tools or experts.</div>
+			</div>
+			<div class="features-img">
+				<img src="./static/images/features-bg.png">
+			</div>
+		</div>
+	</section>
+
+	<section id="services">
+		<div class="title-text">
+			<h1>WE PROVIDE</h1>
+		</div>
+		<div class="service-box">
+			<div class="single-service">
+				<img src="./static/images/service-1.jpg">
+				<a href="/crop-recommendation">
+					<h1>Crop Recommendation</h1>
+				</a>
+				<p>Analyzes soil and weather to suggest best crop.</p>
+			</div>
+			<div class="single-service">
+				<img src="./static/images/service-3.jpg">
+				<a href="/fertilizer-recommendation">
+					<h1>Fertilizer Recommendation</h1>
+				</a>
+				<p>Finds best fertilizer for better growth.</p>
+			</div>
+			<div class="single-service">
+				<img src="./static/images/service-2.jpg">
+				<a href="/crop-disease">
+					<h1>Crop Disease Prediction</h1>
+				</a>
+				<p>Scan your crop and predict possible diseases.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- 🔥 AI Chat Assistant Section -->
+	<section id="chatbot" class="bg-light py-5">
+		<div class="container">
+			<div class="card shadow p-4">
+				<h2 class="mb-3 text-success">🤖 AgriGPT Assistant</h2>
+				<p>Ask me anything about crops, soil, weather, or fertilizer!</p>
+				<div class="input-group mb-3">
+					<input id="chat-input" type="text" class="form-control" placeholder="Type your question here...">
+					<button onclick="sendChat()" class="btn btn-success">Send</button>
+				</div>
+				<div id="chat-response" class="p-3 border rounded bg-white text-dark" style="min-height: 100px;"></div>
+			</div>
+		</div>
+	</section>
+
+	<!-- 🎤 Floating Mic -->
+	<style>
+		#voice-assistant {
+			position: fixed;
+			bottom: 30px;
+			right: 30px;
+			z-index: 9999;
+			background-color: #28a745;
+			color: white;
+			border: none;
+			border-radius: 50%;
+			width: 60px;
+			height: 60px;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+			cursor: pointer;
+			font-size: 24px;
+		}
+	</style>
+
+	<button id="voice-assistant" onclick="startVoice()">🎤</button>
+
+	<section id="contact">
+		<div class="footer-title-text"></div>
+		<div class="footer-row">
+			<div class="footer-left">
+				<h1>Urban Agri</h1>
+			</div>
+			<div class="footer-right"></div>
+		</div>
+	</section>
+	{% endblock %}
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+
+	<script>
+		async function sendChat() {
+			const userInput = document.getElementById("chat-input").value;
+			const res = await fetch("/chat", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ message: userInput })
+			});
+			const data = await res.json();
+			document.getElementById("chat-response").innerText = data.response;
+		}
+
+		// 🎙️ Voice Assistant Logic
+		const synth = window.speechSynthesis;
+
+		function speak(text) {
+			const utterance = new SpeechSynthesisUtterance(text);
+			utterance.rate = 1;
+			utterance.pitch = 1;
+			synth.speak(utterance);
+		}
+
+		async function startVoice() {
+			const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+			recognition.lang = 'en-US';
+			recognition.interimResults = false;
+			recognition.maxAlternatives = 1;
+
+			recognition.start();
+
+			recognition.onresult = async function (event) {
+				const result = event.results[0][0].transcript.toLowerCase();
+				console.log("You said:", result);
+
+				if (result.includes("hello")) {
+					speak("Hi! How can I assist you in agriculture today?");
+				} else {
+					const res = await fetch("/chat", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ message: result })
+					});
+					const data = await res.json();
+					document.getElementById("chat-response").innerText = data.response;
+					speak(data.response);
+				}
+			};
+
+			recognition.onerror = function (event) {
+				console.error("Speech recognition error:", event.error);
+				speak("Sorry, I didn't catch that. Please try again.");
+			};
+		}
+	</script>
+</body>
+
+</html>
